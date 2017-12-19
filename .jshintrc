@@ -1,0 +1,28 @@
+{
+    
+    "bitwise": true,
+    "browser" : true,
+    "camelcase": true,
+    "curly": true,
+    "eqeqeq": true,
+    "expr": true,
+    "forin": true,
+    "immed": true,
+    "latedef": true,
+    "maxlen": false,
+    "newcap": true,
+    "noarg": true,
+    "noempty": true,
+    "nonew": false,
+    "onevar": true,
+    "plusplus": true,
+    "quotmark": "single",
+    "regexp": false,
+    "strict": true,
+    "trailing": true,
+    "undef": true,
+    "unused": true,
+    "validthis": true,
+    "white": true
+
+}

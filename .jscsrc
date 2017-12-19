@@ -1,0 +1,29 @@
+{
+
+    "preset": "jquery",
+
+    "validateQuoteMarks": { "mark": "'", "escape": true },
+
+    "requireMultipleVarDecl": "onevar",
+
+    "disallowTrailingWhitespace": "ignoreEmptyLines",
+
+    "disallowSpacesInFunctionExpression": null,
+    "requireSpacesInFunctionExpression": {
+        "beforeOpeningRoundBrace": true,
+        "beforeOpeningCurlyBrace": true
+    },
+    "disallowSpacesInAnonymousFunctionExpression": null,
+    "requireSpacesInAnonymousFunctionExpression": {
+        "beforeOpeningRoundBrace": true,
+        "beforeOpeningCurlyBrace": true
+    },
+    "disallowSpaceAfterObjectKeys": { "allExcept": [ "aligned" ] },
+
+    "requireLineFeedAtFileEnd": false,
+    "disallowMultipleLineBreaks": false,
+
+    "requirePaddingNewLinesBeforeLineComments": false,
+    "requireCapitalizedComments": false
+
+}
