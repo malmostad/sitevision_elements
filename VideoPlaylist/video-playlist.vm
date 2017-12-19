@@ -1,0 +1,52 @@
+
+<section class="movies">
+
+    <h1>Webbvideo</h1>
+
+    <div class="bc-video-box">
+        <video id="bc-video"
+               data-account="745456160001"
+               data-player="ac887454-ec8b-4ffc-a530-4af5c1c8e8c7"
+               data-embed="default" class="video-js bc-video" controls="">
+        </video>
+    </div>
+
+    #if ( $hasPlaylist )
+
+    <ul class="${video_class}">
+        #foreach( $video in $playlist )
+        #if( $video.useExternalVideoLink )
+        <li>
+            <a href="http://video.malmo.se/?bctid=${video.id}">
+                <div class="crop">
+                    <img src="${video.thumbnailURL}" alt="">
+                    <div class="play"></div>
+                </div>
+                <h2>${video.name}</h2>
+            </a>
+        </li>
+        #else
+        <li class="show-inline" data-video-id="${video.id}">
+            <div class="crop">
+                <img src="${video.thumbnailURL}" alt="">
+                <div class="play"></div>
+            </div>
+            <h2>${video.name}</h2>
+        </li>
+        #end
+        #end
+    </ul>
+
+    #elseif ( $editmode )
+
+    <div style="font-size:20px;color:#fff;padding:40px 10px 50px;text-align:center;">
+        Ingen spellista vald
+    </div>
+
+    #end
+
+    <a href="http://video.malmo.se/" class="more">Fler filmer</a>
+
+</section>
+
+
