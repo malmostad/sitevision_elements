@@ -5,82 +5,83 @@
 // @scriptVariables {svtype:text} playlistId (Spellista)
 //                  - Välj en spellista
 
+
+//**** CONFIG AT BOTTOM OF THIS FILE ****
+
+
 var editmode,
-    playlist     = [],
-    hasPlaylist  = false,
-    playlistInfo = {},
-    video_class  = 'n6'; // jshint ignore:line
+    playlist    = [],
+    hasPlaylist = false,
+    videoClassName;
 
-( function ( playlistID, URL, IOUtils ) {
+( function ( API_URL, POLICY_KEY, kfPlaylistID, CLIENT_ID, LIMIT, playlistID, URL, httpclient ) {
 
-    // **** CONFIG ****
-    var TOKEN       = '--- Enter Brightcove API Token here---',
-        API_URL     = 'http://api.brightcove.com/services/library?',
-        LIST_PARAMS = {
-            media_delivery: 'http',
-            get_item_count: true,
-            token         : TOKEN,
-            command       : 'find_playlist_by_id',
-            playlist_id   : ''
-        },
-        // **** CONFIG ****
-        maxCount    = 6,
-        siteUrl     = require( 'ResourceLocatorUtil' ).getSitePage()
-                                                      .getProperty( 'URL' ).value.toString(),
-        _playlist, i;
+    var currentPage = require( 'PortletContextUtil' ).getCurrentPage(),
+        sitePage    = require( 'ResourceLocatorUtil' ).getSitePage(),
+        siteUrl     = sitePage.getProperty( 'URL' ).value.toString(),
+        _isExtWeb   = ( siteUrl.indexOf( 'komin' ) === -1 ),
+        _playlist, _kfPlaylist, i;
 
     // 4 videos for komin!
-    if ( siteUrl.indexOf( 'komin' ) > -1 ) {
-        maxCount    = 4;
-        video_class = 'n4';
+    if ( !_isExtWeb ) {
+        LIMIT = 4;
     }
 
-    playlistID = ( playlistID && playlistID !== '-' ) ? playlistID : false;
-    editmode   = !( require( 'VersionUtil' ).getCurrentVersion() );
+    // class name - different for komin / malmo.se
+    videoClassName = 'n' + LIMIT;
 
-    function extend() {
-        var i, key;
-        for ( i = 1; i < arguments.length; i += 1 ) {
-            for ( key in arguments[ i ] ) {
-                if ( arguments[ i ].hasOwnProperty( key ) ) {
-                    if ( typeof arguments[ 0 ][ key ] === 'object' &&
-                         typeof arguments[ i ][ key ] === 'object' ) {
-                        extend( arguments[ 0 ][ key ], arguments[ i ][ key ] );
-                    } else {
-                        arguments[ 0 ][ key ] = arguments[ i ][ key ];
-                    }
-                }
-            }
-        }
-        return arguments[ 0 ];
+    editmode = !( require( 'VersionUtil' ).getCurrentVersion() );
+
+    if ( !playlistID ) {
+        return;
     }
 
-    function params( obj ) {
-        return Object.keys( obj ).map( function ( key ) {
-            return key + '=' + obj[ key ];
-        } ).join( '&' );
-    }
-
-    function getURL( id ) {
-        var p   = extend( {}, LIST_PARAMS, { playlist_id: id } ),
-            url = API_URL + params( p );
+    function getURL( id, limit ) {
+        var url = API_URL
+            .replace( '{client_id}', CLIENT_ID )
+            .replace( '{playlist_id}', id )
+            .replace( '{limit}', limit );
         return new URL( url );
     }
 
-    function getData( id ) {
-        var url, connection, data;
+    function getData( id, limit ) {
+
+        var url, connection, getMethod, httpClient, data;
+
         try {
-            url        = getURL( id );
+
+            url        = getURL( id, limit );
             connection = url.openConnection();
-            data       = IOUtils.toString( connection.getInputStream(), 'UTF-8' );
+
+            getMethod  = new httpclient.methods.GetMethod( url.toString() );
+            httpClient = new httpclient.HttpClient();
+
+            httpClient.setConnectionTimeout( 10000 );
+            httpClient.setHttpConnectionFactoryTimeout( 10000 );
+            httpClient.setTimeout( 10000 );
+
+            getMethod.setRequestHeader( 'Content-Type', 'application/x-www-form-urlencoded' );
+            getMethod.setRequestHeader( 'Authorization', 'BCOV-Policy ' + POLICY_KEY );
+            getMethod.setFollowRedirects( true );
+
+            try {
+                httpClient.executeMethod( getMethod );
+                data = getMethod.getResponseBodyAsString();
+            } catch ( e ) {
+                out.println( 'Kunde inte hämta data från Brightcoves API<br>' );
+            } finally {
+                getMethod.releaseConnection();
+            }
         } catch ( e ) {
             out.println( 'Kunde inte hämta data från Brightcoves API<br>' );
         }
+
         return ( data ? data : false );
+
     }
 
-    function getJsonData( id ) {
-        var data = getData( id ),
+    function getJsonData( id, limit ) {
+        var data = getData( id, limit ),
             json;
         if ( data ) {
             try {
@@ -92,30 +93,73 @@ var editmode,
         return ( json ? json : undefined );
     }
 
-    if ( playlistID ) {
-        _playlist = getJsonData( playlistID );
-        if ( _playlist && _playlist.id ) {
-            playlistInfo = {
-                id   : _playlist.id.toString(),
-                name : _playlist.name,
-                count: ( _playlist.videoIds ? _playlist.videoIds.length : 0 ).toString()
-            };
-            for ( i = 0; i < _playlist.videos.length && i < maxCount; i += 1 ) {
-                if ( _playlist.videos[ i ] && _playlist.videos[ i ].id ) {
-                    playlist.push( {
-                        id                  : _playlist.videos[ i ].id.toString(),
-                        name                : _playlist.videos[ i ].name,
-                        thumbnailURL        : _playlist.videos[ i ].thumbnailURL,
-                        useExternalVideoLink: _playlist.videos[ i ].useExternalVideoLink
-                    } );
+    function getVideoThumbnail( sources ) {
+        var src = false,
+            i, s;
+        if ( sources && sources.length ) {
+            for ( i = 0; i < sources.length; i += 1 ) {
+                s = sources[ i ].src;
+                s && ( src = s );
+                if ( src && src.startsWith( 'https' ) ) {
+                    break;
                 }
             }
-            hasPlaylist = true;
         }
+        return src;
     }
 
+    function getVideoData( video, useExternal ) {
+        return {
+            id                  : video.id.toString(),
+            name                : video.name,
+            thumbnailURL        : getVideoThumbnail( video.thumbnail_sources ),
+            useExternalVideoLink: !!( useExternal )
+        };
+    }
+
+    // Get playlist data
+    if ( currentPage.equals( sitePage ) && _isExtWeb ) {
+        //_playlist   = getJsonData( playlistID, LIMIT - 1 );
+        //_kfPlaylist = getJsonData( kfPlaylistID, 1 );
+        _playlist = getJsonData( playlistID, LIMIT );
+    } else {
+        _playlist = getJsonData( playlistID, LIMIT );
+    }
+
+    if ( _playlist && _playlist.videos && _playlist.videos.length ) {
+        for ( i = 0; i < _playlist.videos.length && i < LIMIT; i += 1 ) {
+            playlist.push( getVideoData( _playlist.videos[ i ] ) );
+        }
+        hasPlaylist = true;
+    }
+
+    if ( _kfPlaylist && _kfPlaylist.videos && _kfPlaylist.videos.length ) {
+        playlist.push( getVideoData( _kfPlaylist.videos[ 0 ], true ) );
+    }
+
+
 }(
+    // **** CONFIG START ****
+
+    // API_URL
+    'https://edge.api.brightcove.com/playback/v1/accounts/' +
+    '{client_id}/playlists/{playlist_id}?limit={limit}',
+
+    // POLICY_KEY
+    '{POLICY_KEY}',
+
+    // ID for playlist Kommunfullmäktige
+    '2623641282001',
+
+    // Client ID
+    '745456160001',
+
+    // Default limit for number of videos to fetch in playlist
+    6,
+
+    // **** CONFIG END ****
+
     scriptVariables.playlistId,
     java.net.URL,
-    Packages.org.apache.commons.io.IOUtils
+    Packages.org.apache.commons.httpclient
 ) );

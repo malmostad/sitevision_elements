@@ -13,13 +13,15 @@
 
     #if ( $hasPlaylist )
 
-    <ul class="${video_class}">
+    <ul class="${videoClassName}">
         #foreach( $video in $playlist )
         #if( $video.useExternalVideoLink )
         <li>
             <a href="http://video.malmo.se/?bctid=${video.id}">
                 <div class="crop">
+                    #if ( $thumbnailURL )
                     <img src="${video.thumbnailURL}" alt="">
+                    #end
                     <div class="play"></div>
                 </div>
                 <h2>${video.name}</h2>

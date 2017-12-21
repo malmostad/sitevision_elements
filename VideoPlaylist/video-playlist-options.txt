@@ -42,6 +42,7 @@
 4103723035001 ; Förskoleförvaltningen IT (6)
 4720293202001 ; Safe Havens 2015-2017 (7)
 5303543576001 ; Ledarskapsdagen (5)
+5687918245001 ; Amiralsstaden
 1663906032001 ; Teckenspråk (21)
 2303604979001 ; Värdegrund (3)
 2294101849001 ; Ny organisation 2013 (9)
