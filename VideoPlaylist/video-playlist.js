@@ -14,7 +14,16 @@ var editmode,
     hasPlaylist = false,
     videoClassName;
 
-( function ( API_URL, POLICY_KEY, kfPlaylistID, CLIENT_ID, LIMIT, playlistID, URL, httpclient ) {
+( function ( API_URL,
+             LIMIT,
+             CLIENT_ID,
+             POLICY_KEY,
+             KF_CLIENT_ID,
+             KF_POLICY_KEY,
+             KF_PLAYLIST_ID,
+             playlistID,
+             URL,
+             httpclient ) {
 
     var currentPage = require( 'PortletContextUtil' ).getCurrentPage(),
         sitePage    = require( 'ResourceLocatorUtil' ).getSitePage(),
@@ -36,21 +45,21 @@ var editmode,
         return;
     }
 
-    function getURL( id, limit ) {
+    function getURL( id, limit, isKF ) {
         var url = API_URL
-            .replace( '{client_id}', CLIENT_ID )
+            .replace( '{client_id}', ( isKF ? KF_CLIENT_ID : CLIENT_ID ) )
             .replace( '{playlist_id}', id )
             .replace( '{limit}', limit );
         return new URL( url );
     }
 
-    function getData( id, limit ) {
+    function getData( id, limit, isKF ) {
 
         var url, connection, getMethod, httpClient, data;
 
         try {
 
-            url        = getURL( id, limit );
+            url        = getURL( id, limit, isKF );
             connection = url.openConnection();
 
             getMethod  = new httpclient.methods.GetMethod( url.toString() );
@@ -61,7 +70,10 @@ var editmode,
             httpClient.setTimeout( 10000 );
 
             getMethod.setRequestHeader( 'Content-Type', 'application/x-www-form-urlencoded' );
-            getMethod.setRequestHeader( 'Authorization', 'BCOV-Policy ' + POLICY_KEY );
+            getMethod.setRequestHeader(
+                'Authorization',
+                'BCOV-Policy ' + ( isKF ? KF_POLICY_KEY : POLICY_KEY )
+            );
             getMethod.setFollowRedirects( true );
 
             try {
@@ -80,8 +92,8 @@ var editmode,
 
     }
 
-    function getJsonData( id, limit ) {
-        var data = getData( id, limit ),
+    function getJsonData( id, limit, isKF ) {
+        var data = getData( id, limit, isKF ),
             json;
         if ( data ) {
             try {
@@ -119,9 +131,9 @@ var editmode,
 
     // Get playlist data
     if ( currentPage.equals( sitePage ) && _isExtWeb ) {
-        //_playlist   = getJsonData( playlistID, LIMIT - 1 );
-        //_kfPlaylist = getJsonData( kfPlaylistID, 1 );
-        _playlist = getJsonData( playlistID, LIMIT );
+        _playlist   = getJsonData( playlistID, LIMIT - 1 );
+        _kfPlaylist = getJsonData( KF_PLAYLIST_ID, 1, true );
+
     } else {
         _playlist = getJsonData( playlistID, LIMIT );
     }
@@ -145,17 +157,23 @@ var editmode,
     'https://edge.api.brightcove.com/playback/v1/accounts/' +
     '{client_id}/playlists/{playlist_id}?limit={limit}',
 
-    // POLICY_KEY
-    '{POLICY_KEY}',
-
-    // ID for playlist Kommunfullmäktige
-    '2623641282001',
+    // Default limit for number of videos to fetch in playlist
+    6,
 
     // Client ID
     '745456160001',
 
-    // Default limit for number of videos to fetch in playlist
-    6,
+    // POLICY_KEY
+    '{ENTER POLICY KEY HERE}',
+
+    // KF Client ID
+    '2494809924001',
+
+    // KF_POLICY_KEY
+    '{ENTER KF POLICY KEY HERE}',
+
+    // ID for playlist Kommunfullmäktige
+    '2623641282001',
 
     // **** CONFIG END ****
 

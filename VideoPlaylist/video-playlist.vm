@@ -17,9 +17,9 @@
         #foreach( $video in $playlist )
         #if( $video.useExternalVideoLink )
         <li>
-            <a href="//video.malmo.se/?bctid=${video.id}">
+            <a href="http://video.malmo.se/?bctid=${video.id}">
                 <div class="crop">
-                    #if ( $thumbnailURL )
+                    #if ( $video.thumbnailURL )
                     <img src="${video.thumbnailURL}" alt="">
                     #end
                     <div class="play"></div>
@@ -30,7 +30,9 @@
         #else
         <li class="show-inline" data-video-id="${video.id}">
             <div class="crop">
+                #if ( $video.thumbnailURL )
                 <img src="${video.thumbnailURL}" alt="">
+                #end
                 <div class="play"></div>
             </div>
             <h2>${video.name}</h2>

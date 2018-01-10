@@ -1,0 +1,67 @@
+{
+    "videos":[
+        {
+            "description":"Sändning från Malmö Kommunfullmäktige",
+            "poster_sources":[
+                {
+                    "src":"http://brightcove04.o.brightcove.com/2494809924001/2494809924001_5678734849001_5678738044001-vs.jpg?pubId=2494809924001&videoId=5678738044001"
+                },
+                {
+                    "src":"https://brightcove04pmdo-a.akamaihd.net/2494809924001/2494809924001_5678734849001_5678738044001-vs.jpg?pubId=2494809924001&videoId=5678738044001"
+                }
+            ],
+            "tags":[
+                "2017",
+                "december",
+                "kf"
+            ],
+            "cue_points":[
+
+            ],
+            "custom_fields":{
+                "cblandingpage":"http://malmostad.wallenmedia.se/kf20171220/"
+            },
+            "account_id":"2494809924001",
+            "sources":[
+                {
+                    "type":"application/vnd.apple.mpegurl",
+                    "src":"https://serverstarter.azurewebsites.net/media/wallen.m3u8",
+                    "asset_id":"5678736795001"
+                }
+            ],
+            "name":"Kommunfullmäktige 20 december 2017",
+            "reference_id":null,
+            "long_description":"Klippet skapat av ServerStarterOnline 2017-12-13",
+            "duration":0,
+            "economics":"AD_SUPPORTED",
+            "published_at":"2017-12-13T08:12:04.027Z",
+            "text_tracks":[
+
+            ],
+            "updated_at":"2017-12-13T08:19:42.278Z",
+            "thumbnail":"http://brightcove04.o.brightcove.com/2494809924001/2494809924001_5678734848001_5678738044001-th.jpg?pubId=2494809924001&videoId=5678738044001",
+            "poster":"http://brightcove04.o.brightcove.com/2494809924001/2494809924001_5678734849001_5678738044001-vs.jpg?pubId=2494809924001&videoId=5678738044001",
+            "offline_enabled":false,
+            "link":null,
+            "id":"5678738044001",
+            "ad_keys":null,
+            "thumbnail_sources":[
+                {
+                    "src":"http://brightcove04.o.brightcove.com/2494809924001/2494809924001_5678734848001_5678738044001-th.jpg?pubId=2494809924001&videoId=5678738044001"
+                },
+                {
+                    "src":"https://brightcove04pmdo-a.akamaihd.net/2494809924001/2494809924001_5678734848001_5678738044001-th.jpg?pubId=2494809924001&videoId=5678738044001"
+                }
+            ],
+            "created_at":"2017-12-13T08:12:04.027Z"
+        }
+    ],
+    "updated_at":"2017-12-18T14:05:34.418Z",
+    "type":"EXPLICIT",
+    "reference_id":null,
+    "name":"Kommunfullmäktige",
+    "id":"2623641282001",
+    "description":null,
+    "created_at":"2013-08-23T17:07:56.948Z",
+    "account_id":"2494809924001"
+}
