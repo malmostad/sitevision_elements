@@ -23,6 +23,9 @@ var editmode,
              KF_PLAYLIST_ID,
              playlistID,
              URL,
+             InputStreamReader,
+             BufferedReader,
+             StringBuffer,
              httpclient ) {
 
     var currentPage = require( 'PortletContextUtil' ).getCurrentPage(),
@@ -55,7 +58,8 @@ var editmode,
 
     function getData( id, limit, isKF ) {
 
-        var url, connection, getMethod, httpClient, data;
+        var url, connection, getMethod, httpClient, data,
+            rb, is, br, sb, r;
 
         try {
 
@@ -78,7 +82,17 @@ var editmode,
 
             try {
                 httpClient.executeMethod( getMethod );
-                data = getMethod.getResponseBodyAsString();
+
+                rb = getMethod.getResponseBodyAsStream();
+                is = new InputStreamReader( rb );
+                br = new BufferedReader( is );
+                sb = new StringBuffer();
+
+                while ( ( r = br.readLine() ) !== null ) {
+                    sb.append( r );
+                }
+                data = sb.toString();
+
             } catch ( e ) {
                 out.println( 'Kunde inte hämta data från Brightcoves API<br>' );
             } finally {
@@ -179,5 +193,10 @@ var editmode,
 
     scriptVariables.playlistId,
     java.net.URL,
+    java.io.InputStreamReader,
+    java.io.BufferedReader,
+    java.lang.StringBuffer,
     Packages.org.apache.commons.httpclient
 ) );
+
+
