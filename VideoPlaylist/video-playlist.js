@@ -16,6 +16,7 @@ var editmode,
 
 ( function ( API_URL,
              LIMIT,
+             PADDING,
              CLIENT_ID,
              POLICY_KEY,
              KF_CLIENT_ID,
@@ -26,13 +27,21 @@ var editmode,
              InputStreamReader,
              BufferedReader,
              StringBuffer,
+             Arrays,
              httpclient ) {
 
     var currentPage = require( 'PortletContextUtil' ).getCurrentPage(),
         sitePage    = require( 'ResourceLocatorUtil' ).getSitePage(),
         siteUrl     = sitePage.getProperty( 'URL' ).value.toString(),
         _isExtWeb   = ( siteUrl.indexOf( 'komin' ) === -1 ),
-        _playlist, _kfPlaylist, i;
+        i           = 0,
+        safety      = 0,
+        _filter, _playlist, _kfPlaylist, _playlistIterator, _video, _targetGroup;
+
+
+    _filter = _isExtWeb ?
+        Arrays.asList( [ 'null', 'malmo-se' ] ) :
+        Arrays.asList( [ 'null', 'komin' ] );
 
     // 4 videos for komin!
     if ( !_isExtWeb ) {
@@ -149,13 +158,35 @@ var editmode,
         _kfPlaylist = getJsonData( KF_PLAYLIST_ID, 1, true );
 
     } else {
-        _playlist = getJsonData( playlistID, LIMIT );
+        _playlist = getJsonData( playlistID, LIMIT + PADDING );
     }
 
     if ( _playlist && _playlist.videos && _playlist.videos.length ) {
-        for ( i = 0; i < _playlist.videos.length && i < LIMIT; i += 1 ) {
-            playlist.push( getVideoData( _playlist.videos[ i ] ) );
+
+        _playlistIterator = Arrays.asList( _playlist.videos ).iterator();
+
+        while ( _playlistIterator.hasNext() && i < LIMIT && safety < 250 ) {
+
+            _targetGroup = null;
+            safety += 1;
+            _video       = _playlistIterator.next();
+
+            if ( _video.custom_fields && _video.custom_fields.targetgroup ) {
+                _targetGroup = _video.custom_fields.targetgroup;
+            }
+
+            if ( _targetGroup ) {
+                if ( _filter.contains( _targetGroup ) ) {
+                    playlist.push( getVideoData( _video ) );
+                    i += 1;
+                }
+            } else {
+                playlist.push( getVideoData( _video ) );
+                i += 1;
+            }
+
         }
+
         hasPlaylist = true;
     }
 
@@ -173,6 +204,9 @@ var editmode,
 
     // Default limit for number of videos to fetch in playlist
     6,
+
+    // Padding --> for filtering
+    10,
 
     // Client ID
     '745456160001',
@@ -196,6 +230,7 @@ var editmode,
     java.io.InputStreamReader,
     java.io.BufferedReader,
     java.lang.StringBuffer,
+    java.util.Arrays,
     Packages.org.apache.commons.httpclient
 ) );
 
