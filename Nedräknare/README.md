@@ -10,6 +10,9 @@ Styling via CSS i filarkivet.
 ## Skriptvariabler
 
 Text: Rubrik
+
 Text: Slutrubrik
-Text: Slutdatum,
+
+Text: Slutdatum
+
 Bool: Stortext
