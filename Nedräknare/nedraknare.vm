@@ -1,0 +1,113 @@
+<p class="countdownTitle">${renderContext.title}</p>
+<div id="pageTimer">
+
+</div>
+<script>
+
+	/* Dependency: jQuery Countdown http://hilios.github.io/jQuery.countdown/ */
+
+   jQuery(function() {
+      jQuery('#pageTimer').countdown('${renderContext.endDate}', function(event) {
+         var html = '';
+
+         if (event.offset.daysToMonth === 0 &&
+             event.offset.hours === 0 &&
+             event.offset.minutes === 0 &&
+             event.offset.seconds === 0) {
+
+            #if ($renderContext.endTitle)
+            html += '<div class="countdownNumber ${renderContext.bigNumber}">${renderContext.endTitle}</div>';
+            jQuery(".countdownTitle").hide();
+            #else
+            html += '<div class="countdownWrapper">';
+            html += '<div class="countdownNumber ${renderContext.bigNumber}">%D</div>';
+            if (event.offset.daysToMonth === 1) {
+               html += '<div class="countdownLabel ${renderContext.bigLabel}">dag</div>';
+            } else {
+               html += '<div class="countdownLabel ${renderContext.bigLabel}">dagar</div>';
+            }
+            html += '</div>';
+
+            html += '<div class="countdownWrapper">';
+            html += '<div class="countdownNumber ${renderContext.bigNumber}">%H</div>';
+
+            if (event.offset.hours === 1) {
+               html += '<div class="countdownLabel ${renderContext.bigLabel}">timme</div>';
+            } else {
+               html += '<div class="countdownLabel ${renderContext.bigLabel}">timmar</div>';
+            }
+
+            html += '</div>';
+
+            html += '<div class="countdownWrapper">';
+            html += '<div class="countdownNumber ${renderContext.bigNumber}">%M</div>';
+            if (event.offset.minutes === 1) {
+               html += '<div class="countdownLabel ${renderContext.bigLabel}">minut</div>';
+            } else {
+               html += '<div class="countdownLabel ${renderContext.bigLabel}">minuter</div>';
+            }
+            html += '</div>';
+
+            html += '<div class="countdownWrapper">';
+            html += '<div class="countdownNumber ${renderContext.bigNumber}">%S</div>';
+
+            if (event.offset.seconds === 1) {
+               html += '<div class="countdownLabel ${renderContext.bigLabel}">sekund</div>';
+            } else {
+               html += '<div class="countdownLabel ${renderContext.bigLabel}">sekunder</div>';
+            }
+
+            html += '</div>';
+            #end
+
+
+
+         } else {
+            html += '<div class="countdownWrapper">';
+            html += '<div class="countdownNumber ${renderContext.bigNumber}">%D</div>';
+            if (event.offset.daysToMonth === 1) {
+               html += '<div class="countdownLabel ${renderContext.bigLabel}">dag</div>';
+            } else {
+               html += '<div class="countdownLabel ${renderContext.bigLabel}">dagar</div>';
+            }
+            html += '</div>';
+
+            html += '<div class="countdownWrapper">';
+            html += '<div class="countdownNumber ${renderContext.bigNumber}">%H</div>';
+
+            if (event.offset.hours === 1) {
+               html += '<div class="countdownLabel ${renderContext.bigLabel}">timme</div>';
+            } else {
+               html += '<div class="countdownLabel ${renderContext.bigLabel}">timmar</div>';
+            }
+
+            html += '</div>';
+
+            html += '<div class="countdownWrapper">';
+            html += '<div class="countdownNumber ${renderContext.bigNumber}">%M</div class="countdownNumber">';
+            if (event.offset.minutes === 1) {
+               html += '<div class="countdownLabel ${renderContext.bigLabel}">minut</div>';
+            } else {
+               html += '<div class="countdownLabel ${renderContext.bigLabel}">minuter</div>';
+            }
+            html += '</div>';
+
+            html += '<div class="countdownWrapper">';
+            html += '<div class="countdownNumber ${renderContext.bigNumber}">%S</div>';
+
+            if (event.offset.seconds === 1) {
+               html += '<div class="countdownLabel ${renderContext.bigLabel}">sekund</div>';
+            } else {
+               html += '<div class="countdownLabel ${renderContext.bigLabel}">sekunder</div>';
+            }
+
+            html += '</div>';
+         }
+
+         jQuery(this).html(
+            event.strftime(html)
+         );
+      });
+   });
+
+</script>
