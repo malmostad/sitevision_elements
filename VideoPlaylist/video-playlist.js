@@ -12,8 +12,7 @@ var editmode,
              playlistID
 	) {
 
-   var currentPage 	= require( 'PortletContextUtil' ).getCurrentPage(),
-       logUtil		  	= require( 'LogUtil' ),
+   var logUtil		  	= require( 'LogUtil' ),
        requester	  	= require( 'Requester' ),
        sitePage    	= require( 'ResourceLocatorUtil' ).getSitePage(),
        siteUrl     	= sitePage.getProperty( 'URL' ).value.toString(),
@@ -29,7 +28,7 @@ var editmode,
    }
 
    // class name - different for komin / malmo.se
-   videoClassName = _isExtWeb ? 'n5' : 'n4';
+   videoClassName = 'n' + LIMIT;
 
    editmode = !( require( 'VersionUtil' ).getCurrentVersion() );
 
@@ -132,12 +131,12 @@ var editmode,
     'https://edge.api.brightcove.com/playback/v1/accounts/{account_id}/playlists/{playlist_id}?limit=100',
 
     // Default limit for number of videos to fetch in playlist
-    5,
+    6,
 
     // Account ID
     '745456160001',
 
-    // POLICY_KEY - Find it in the brightcove studio
+    // POLICY_KEY - Find it in the Brightcove studio website
     '{ENTER POLICY KEY HERE}',
 
     // **** CONFIG END ****
