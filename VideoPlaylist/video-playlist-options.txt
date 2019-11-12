@@ -88,3 +88,5 @@
 5115357165001 ; Våra Liv (9)
 5444485718001 ; Funktionsstödsförvaltningen (13)
 5442311266001 ; Arbetsmarknads- och socialförvaltningen (6)
+5803858603001 ; Fastighets- och gatukontoret
+5971358564001 ; Creating Archival Knowledge in a Digital World

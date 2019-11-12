@@ -1,43 +1,47 @@
 
-<section class="movies">
-
+<section class="movies servicewebWrapper">
+   
     <h1>Webbvideo</h1>
 
     <div class="bc-video-box">
-        <video id="bc-video"
+        <video-js id="bc-video"
                data-account="745456160001"
-               data-player="ac887454-ec8b-4ffc-a530-4af5c1c8e8c7"
-               data-embed="default" class="video-js bc-video" controls="">
-        </video>
+       			data-player="qbZuNu62r"
+               data-embed="default" 
+               class="video-js bc-video vjs-fluid" 
+               controls="">
+        </video-js>
     </div>
 
     #if ( $hasPlaylist )
-
+    
+	<script src="//players.brightcove.net/745456160001/qbZuNu62r_default/index.min.js"></script>
+   
     <ul class="${videoClassName}">
         #foreach( $video in $playlist )
-        #if( $video.useExternalVideoLink )
-        <li>
-            <a href="http://video.malmo.se/?bctid=${video.id}">
-                <div class="crop">
-                    #if ( $video.thumbnailURL )
-                    <img src="${video.thumbnailURL}" alt="">
-                    #end
-                    <div class="play"></div>
-                </div>
-                <h2>${video.name}</h2>
-            </a>
-        </li>
-        #else
-        <li class="show-inline" data-video-id="${video.id}">
-            <div class="crop">
-                #if ( $video.thumbnailURL )
-                <img src="${video.thumbnailURL}" alt="">
-                #end
-                <div class="play"></div>
-            </div>
-            <h2>${video.name}</h2>
-        </li>
-        #end
+           #if( $video.useExternalVideoLink )
+           <li>
+               <a href="http://video.malmo.se/?bctid=${video.id}">
+                   <div class="crop">
+                       #if ( $video.thumbnailURL )
+                       <img src="${video.thumbnailURL}" alt="">
+                       #end
+                       <div class="play"></div>
+                   </div>
+                   <h2>${video.name}</h2>
+               </a>
+           </li>
+           #else
+           <li class="show-inline" data-video-id="${video.id}">
+               <div class="crop">
+                   #if ( $video.thumbnailURL )
+                   <img src="${video.thumbnailURL}" alt="">
+                   #end
+                   <div class="play"></div>
+               </div>
+               <h2>${video.name}</h2>
+           </li>
+           #end
         #end
     </ul>
 
@@ -52,6 +56,3 @@
     <a href="http://video.malmo.se/" class="more">Fler filmer</a>
 
 </section>
-
-
-
