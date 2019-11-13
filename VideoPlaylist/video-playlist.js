@@ -125,21 +125,21 @@ var editmode,
 	getJsonData(playlistID, LIMIT);
    
 }(
-    // **** CONFIG START ****
+   // **** CONFIG START ****
 
-    // API_URL - Limit has to be set very high since filtering on custom fields is done later
-    'https://edge.api.brightcove.com/playback/v1/accounts/{account_id}/playlists/{playlist_id}?limit=100',
+   // API_URL - Limit has to be set very high since filtering on custom fields is done later
+   'https://edge.api.brightcove.com/playback/v1/accounts/{account_id}/playlists/{playlist_id}?limit=100',
 
-    // Default limit for number of videos to fetch in playlist
-    6,
+   // Limit for number of videos to show in playlist
+	scriptVariables.videoLimit,
 
-    // Account ID
-    '745456160001',
+   // Account ID
+   '745456160001',
 
-    // POLICY_KEY - Find it in the Brightcove studio website
-    '{ENTER POLICY KEY HERE}',
+   // POLICY_KEY - Find it in the Brightcove studio website
+   'BCpkADawqM0m4UEu0_9utV2NM23ptnXkZenjkdyW0tA71Ks_vwmXVxzF5Q213vR84jMj214bRifId4mVGbSH8QB1enGd2GK4mCLXIHrXrXJOJt_iZwf0riymHA0',
 
-    // **** CONFIG END ****
+   // **** CONFIG END ****
 
-    scriptVariables.playlistId
+   scriptVariables.playlistId
 ) );

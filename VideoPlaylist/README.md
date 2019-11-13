@@ -23,6 +23,8 @@ To create a Policy Key you will need Account ID, Client ID and Client Secret.
 - Replace {POLICY_KEY} at bottom of JS-file with the Policy key you have created.
 - Add variable to script module: playlistId (type single selection)
 - Add options to variable (playlist name, playlist id) see video-playlist-options.txt
+- Add variable to script module: videoLimit (type single selection)
+- Add options to variable (4, 5 and 6)
 - Export element
 
 ### Element modifications
